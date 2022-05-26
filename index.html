@@ -40,11 +40,14 @@
        @media screen and (max-width:992px){
             .blob{
                margin: 0 auto;
+               width: 250px;
+            height: 250px;
             }
             #blik{
             margin: 0 auto !important;
           }
        }
+
        .website-counter {
   display: flex;
   justify-content: center;
@@ -65,7 +68,17 @@
   margin-top: 10px;
   padding: 10px 10px 10px 10px;
 }
-
+.alert{
+  text-align: center;
+  width: 300px;
+  height:60px;
+  background:#79c879;
+  color:#fff;
+  margin-bottom:10px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+ 
 
        
   </style>
@@ -263,9 +276,9 @@
              <div class="col-lg-8">
                  <div class="contact-form text-center">
                      <div id="success"></div>
-                     <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                     <form name="sentMessage" id="contactForm" novalidate="novalidate" autocomplete="off">
                          <div class="form-row">
-                              <img src="assets/img/logo.png" class="col-sm-6" width="290px" height="290px" style="float:right;" alt="" id="image">
+                              <img src="assets/img/logo.png" class="col-sm-6" width="285px" height="285px" style="float:right;" alt="" id="image">
                              <div class="control-group col-sm-6">
                                  <input type="text" class="form-control p-4" id="name" placeholder="Your Name"
                                      required="required" data-validation-required-message="Please enter your name" />
@@ -293,6 +306,7 @@
                              <button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send
                                  Message</button>
                          </div>
+                         <div class="alert col-sm-6">Your message has been sent</div>
                      </form>
                  </div>
              </div>
@@ -370,7 +384,67 @@ counterContainer.innerHTML = `Profile Visits: ${visitCount}`;
   
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+ 
+   	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+        <script>
+             
+             firebase.initializeApp( {
+               apiKey: "AIzaSyAcu2a3yMjpwOeJUXY1Sw_vgnBIG-0Jz5Y",
+       authDomain: "portfolio-91481.firebaseapp.com",
+       projectId: "portfolio-91481",
+       storageBucket: "portfolio-91481.appspot.com",
+       messagingSenderId: "798569731414",
+       appId: "1:798569731414:web:5cd13de49540d4ba05b2f7",
+       measurementId: "G-D3275C6VM5"
+             });
+             var db = firebase.firestore();
+            
+   
+          </script>
+        <script>
+             
+             // Listen for form submit
+             document.getElementById('contactForm').addEventListener('submit', submitForm);
+             
+             // Submit form
+             function submitForm(e){
+               e.preventDefault();
+             
+               // Get values
+               var name = getInputVal('name');
+               
+               var email = getInputVal('email');
+               
+               var message = getInputVal('message');
 
+               var subject = getInputVal('subject');
+
+               firebase.firestore().collection("Contact").doc(name).set({
+                            name:name,
+                            email:email,
+                            message:message,
+                            subject:subject
+                       })
+              
+             
+               // Show alert
+               document.querySelector('.alert').style.display = 'block';
+             
+               // Hide alert after 3 seconds
+               setTimeout(function(){
+                  document.querySelector('.alert').style.display = 'none';
+               },3000);
+             
+               // Clear form
+               document.getElementById('contactForm').reset();
+             }
+             
+             // Function to get get form values
+             function getInputVal(id){
+               return document.getElementById(id).value;
+             }
+                  </script>
 </body>
 
 </html>
