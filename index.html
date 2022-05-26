@@ -9,7 +9,41 @@
   <title>MyPortfolio</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+   .blob{
+            overflow: hidden;
+            width: 400px;
+            height: 400px;
+            border-radius: 42% 56% 72% 28% / 42% 42% 56% 48%;
+            background: url("assets/img/2.png");
+            background-size: cover;
+            background-position: center;
+            animation: morph 3.5s linear infinite;
+            box-shadow: 2px 4px 8px 8px #322e2f;
+       }
+       @keyframes morph{
+            0%, 100%{
+                 border-radius: 42% 56% 72% 28% / 42% 42% 56% 48%;
+                 box-shadow: 3px 6px 9px 10px #1560bd;
+            }
+            33%{
+                 border-radius:
+                 72% 28% 48% 48% / 28% 28% 72% 72%;
+                 box-shadow: 4px 8px 12px 15px #0073cf;
+            }
+            66%{
+                 border-radius:
+                 100% 56% 56% 100% / 100% 100% 56% 56%;
+                 box-shadow: 1px 2px 3px 4px #00fdff;
+            }
+       }
+       @media screen and (max-width:992px){
+            .blob{
+               margin: 0 auto;
+            }
 
+       }
+       
+  </style>
  
   <!-- Favicons -->
   <link href="assets/img/logo.png" rel="icon">
@@ -75,7 +109,7 @@
                    </div>
                    <div class="row align-items-center">
                        <div class="col-lg-5 pb-4 pb-lg-0">
-                           <img class="img-fluid rounded w-100 image" src="assets/img/2.png" alt="">
+                         <div class="blob"></div>
                        </div>
                        <div class="col-lg-7">
                            <h3 class="mb-4" align="center" style="font-weight: bold;">FrontEnd Developer</h3>
