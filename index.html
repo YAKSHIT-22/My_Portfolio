@@ -3,12 +3,15 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="author" content="Yakshit" />
+  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="bootstrap-iso.css">
   <title>MyPortfolio</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <meta name="description" content="PortFolio | Developer">
+  <meta name="keyword" content="portfolio, developer">
   <style>
        .blob{
             overflow: hidden;
@@ -367,19 +370,6 @@
           document.getElementById('image').style.float="right";
      }
 }, true);
-var counterContainer = document.querySelector(".website-counter");
-var resetButton = document.querySelector("#reset");
-var visitCount = localStorage.getItem("page_view");
-
-// Check if page_view entry is present
-if (visitCount) {
-  visitCount = Number(visitCount) + 1;
-  localStorage.setItem("page_view", visitCount);
-} else {
-  visitCount = 1;
-  localStorage.setItem("page_view", 1);
-}
-counterContainer.innerHTML = `Profile Visits: ${visitCount}`;
 
  </script>
   
@@ -446,6 +436,15 @@ counterContainer.innerHTML = `Profile Visits: ${visitCount}`;
                return document.getElementById(id).value;
              }
                   </script>
+  
+      <script>
+     function cb(response) {
+          document.querySelector('.website-counter').innerHTML = `Profile Visits: ${response.value}`;
+     }
+     </script>
+     <script async src="https://api.countapi.xyz/hit/profil/visits?callback=cb"></script>
+  
+  
 </body>
 
 </html>
