@@ -438,11 +438,28 @@
                   </script>
   
       <script>
-     function cb(response) {
-          document.querySelector('.website-counter').innerHTML = `Profile Visits: ${response.value}`;
-     }
-     </script>
-     <script async src="https://api.countapi.xyz/hit/profil/visits?callback=cb"></script>
+             function get_ip(json){
+                  viewers_ip = json.ip;
+                  count_view(viewers_ip);
+             
+          }
+          function count_view(viewers_ip){
+               var views;
+               var ip_to_string = viewers_ip.toString();
+               for (var i = 0; i < ip_to_string.length; i++){
+                    ip_to_string = ip_to_string.replace(".", "-");
+               }
+               firebase.database().ref().child("page_views/" + ip_to_string).set({
+                  viewers_ip : viewers_ip
+             });
+             firebase.database().ref().child("page_views").on("value", function(snapshot){
+                  views = snapshot.numChildren();
+                  document.querySelector(".website-counter").innerHTML = `Profile Views: ${views}`;
+             })
+
+          }
+                  </script>
+                  <script type="application/javascript" src="https://api.ipify.org/?/format=jsonp&callback=get_ip"></script>
   
   
 </body>
