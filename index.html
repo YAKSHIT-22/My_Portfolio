@@ -3,15 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta name="author" content="Yakshit" />
-  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="bootstrap-iso.css">
   <title>MyPortfolio</title>
-  <meta name="description" content="PortFolio | Developer">
-  <meta name="keyword" content="portfolio, developer">
+  <meta content="" name="description">
+  <meta content="" name="keywords">
   <style>
        .blob{
             overflow: hidden;
@@ -75,7 +72,6 @@
   text-align: center;
   width: 300px;
   height:60px;
-  display:none;
   background:#79c879;
   color:#fff;
   margin-bottom:10px;
@@ -371,6 +367,7 @@
      }
 }, true);
 
+
  </script>
   
   <!-- Template Main JS File -->
@@ -378,6 +375,7 @@
  
    	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
         <script>
              
              firebase.initializeApp( {
@@ -435,16 +433,28 @@
              function getInputVal(id){
                return document.getElementById(id).value;
              }
+             function get_ip(json){
+                  viewers_ip = json.ip;
+                  count_view(viewers_ip);
+             
+          }
+          function count_view(viewers_ip){
+               var views;
+               var ip_to_string = viewers_ip.toString();
+               for (var i = 0; i < ip_to_string.length; i++){
+                    ip_to_string = ip_to_string.replace(".", "-");
+               }
+               firebase.database().ref().child("page_views/" + ip_to_string).set({
+                  viewers_ip : viewers_ip
+             });
+             firebase.database().ref().child("page_views").on("value", function(snapshot){
+                  views = snapshot.numChildren();
+                  document.querySelector(".website-counter").innerHTML = `Profile Views: ${views}`;
+             })
+
+          }
                   </script>
-  
-      <script>
-     function cb(response) {
-          document.querySelector('.website-counter').innerHTML = `Profile Visits: ${response.value}`;
-     }
-     </script>
-     <script async src="https://api.countapi.xyz/hit/profil/visits?callback=cb"></script>
-  
-  
+                  <script type="application/javascript" src="https://api.ipify.org/?/format=jsonp&callback=get_ip"></script>
 </body>
 
 </html>
