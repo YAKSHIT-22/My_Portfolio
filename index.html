@@ -75,18 +75,12 @@
 #views-counter{
      color: white;
 }
-.alert{
-  text-align: center;
-  width: 300px;
-  height:60px;
-  display:none;
-  background:#79c879;
-  color:#fff;
-  margin-bottom:10px;
-  margin: 0 auto;
-  margin-top: 10px;
-}
- 
+.control-group.success input{
+    border-color: #2ecc71; 
+ }
+ .control-group.error input{
+    border-color: #e74c3c; 
+ }
 
        
   </style>
@@ -314,7 +308,7 @@
                              <button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send
                                  Message</button>
                          </div>
-                         <div class="alert col-sm-6">Your message has been sent</div>
+                       
                      </form>
                  </div>
              </div>
@@ -375,6 +369,7 @@
      }
 }, true);
 
+
  </script>
   
   <!-- Template Main JS File -->
@@ -382,7 +377,7 @@
  
    	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
         <script>
              
              firebase.initializeApp( {
@@ -400,14 +395,27 @@
           </script>
         <script>
              
-             // Listen for form submit
-             document.getElementById('contactForm').addEventListener('submit', submitForm);
-             
-             // Submit form
-             function submitForm(e){
-               e.preventDefault();
-             
-               // Get values
+const form = document.getElementById("contactForm");
+const username = document.getElementById("name");
+const email = document.getElementById("email");
+const subject = document.getElementById("subject");
+const message = document.getElementById("message");
+
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  validate();
+});
+const sendData = (usernameVal, sRate, count) => {
+  if (sRate === count) {
+    
+    swal({
+      title: "Thank You " + `${usernameVal}`,
+      text: "For Contacting Us",
+      icon: "success",
+    });
+     document.getElementById('contactForm')
+     
                var name = getInputVal('name');
                
                var email = getInputVal('email');
@@ -423,26 +431,103 @@
                             subject:subject
                        })
               
-             
-               // Show alert
-               document.querySelector('.alert').style.display = 'block';
-             
-               // Hide alert after 3 seconds
-               setTimeout(function(){
-                  document.querySelector('.alert').style.display = 'none';
-               },3000);
-             
                // Clear form
                document.getElementById('contactForm').reset();
-             }
+             
              
              // Function to get get form values
              function getInputVal(id){
                return document.getElementById(id).value;
              }
-                  </script>
+          }
+};
+const successMsg = (usernameVal) => {
+  let formCon = document.getElementsByClassName("control-group");
+  var count = formCon.length - 1;
+  for (var i = 0; i < formCon.length; i++) {
+    if (formCon[i].className === "control-group col-sm-6 success" || formCon[i].className === "control-group success") {
+      var sRate = 0 + i;
+      sendData(usernameVal, sRate, count);
+    } else {
+      return false;
+    }
+  }
+};
+
+const isEmail = (emailVal) => {
+  var atSymbol = emailVal.indexOf("@");
+  if (atSymbol < 1) return false;
+  var dot = emailVal.lastIndexOf(".");
+  if (dot <= atSymbol + 3) return false;
+  if (dot === emailVal.length - 1) return false;
+  return true;
+};
+
+const validate = () => {
+  const usernameVal = username.value.trim();
+  const emailVal = email.value.trim();
+  const subjectVal = subject.value.trim();
+  const messageVal = message.value.trim();
   
-     <script type="application/javascript">
+
+  if (usernameVal === "") {
+    setErrorMsg(username, "Name cannot be blank");
+  } else if (usernameVal.length <= 2) {
+    setErrorMsg(username, "Name min 3 char");
+  } else {
+    setSuccessMsg(username);
+  }
+
+  if (emailVal === "") {
+    setErrorMsg(email, "Email cannot be blank");
+  } else if (!isEmail(emailVal)) {
+    setErrorMsg(email, "Not a Valid Email");
+  } else {
+    setSuccessMsg(email);
+  }
+
+  if (subjectVal === "") {
+    setErrorMsg(subject, "Subject cannot be blank");
+  } else if (subjectVal.length < 50) {
+    setErrorMsg(subject, "Subject must have at least 50 characters");
+  } else {
+    setSuccessMsg(subject);
+  }
+
+  if (messageVal === "") {
+    setErrorMsg(message, "Message cannot be blank");
+  } else if (messageVal.length < 120) {
+    setErrorMsg(message, "Message must have at least 120 characters");
+  } else {
+    setSuccessMsg(message);
+  }
+
+  successMsg(usernameVal);
+};
+
+function setErrorMsg(input, errormsgs) {
+  const formControl = input.parentElement;
+  const small = formControl.querySelector(".help-block");
+  if(formControl.className === "control-group col-sm-6" || formControl.className === "control-group col-sm-6 success") {
+  formControl.className = "control-group col-sm-6 error";}
+  else if(formControl.className === "control-group" || formControl.className === "control-group success"){
+       formControl.className = "control-group error"
+  }
+  small.innerText = errormsgs;
+}
+function setSuccessMsg(input) {
+  const formControl = input.parentElement;
+  const small = formControl.querySelector(".help-block");
+  if(formControl.className === "control-group col-sm-6"  || formControl.className === "control-group col-sm-6 error"){
+  formControl.className = "control-group col-sm-6 success";}
+  else if(formControl.className === "control-group"  || formControl.className === "control-group error"){
+       formControl.className = "control-group success"
+  }
+  small.innerText = "";
+  
+}
+</script>
+<script type="application/javascript">
              function getIp(json){
                   viewers_ip = json.ip;
                   count_view(viewers_ip);
@@ -470,7 +555,7 @@
 
 
 <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIp"></script>
-  
+                  
 </body>
 
 </html>
